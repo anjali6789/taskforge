@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- ==================== PROJECT COORDINATES ==================== -->
+    <!-- 
+        These 3 values (groupId, artifactId, version) uniquely identify 
+        this project in the Maven ecosystem - like a postal address.
+        
+        groupId: Usually reverse domain (com.company) - identifies your organization
+        artifactId: The project name - must be unique within the groupId
+        version: Semantic versioning - SNAPSHOT means "in development"
+    -->
+    <groupId>com.taskforge</groupId>
+    <artifactId>taskforge-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    
+    <!-- 
+        packaging=pom means this is a PARENT project that doesn't produce 
+        a JAR itself - it only manages child modules
+    -->
+    <packaging>pom</packaging>
+    
+    <name>TaskForge Parent</name>
+    <description>Enterprise Task Management System - Parent POM</description>
+    
+    <!-- ==================== CHILD MODULES ==================== -->
+    <!-- 
+        Lists all sub-projects. Maven will build them in dependency order.
+        Each module is a folder containing its own pom.xml
+    -->
+    <modules>
+        <module>taskforge-common</module>    <!-- Shared utilities, DTOs -->
+        <module>taskforge-core</module>      <!-- Business logic, entities -->
+        <module>taskforge-api</module>       <!-- REST controllers -->
+        <module>taskforge-notification</module> <!-- Email, Kafka, RabbitMQ -->
+    </modules>
+    
+    <!-- ==================== INHERIT FROM SPRING BOOT ==================== -->
+    <!-- 
+        By inheriting from spring-boot-starter-parent, we get:
+        - Pre-configured dependency versions that work together
+        - Sensible plugin defaults
+        - Java version configuration
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.6</version>
+        <relativePath/> <!-- lookup parent from Maven repository -->
+    </parent>
+    
+    <!-- ==================== PROPERTIES ==================== -->
+    <!-- 
+        Centralized version management. Change once, applies everywhere.
+        ${property.name} syntax references these values throughout the POM.
+    -->
+    <properties>
+        <!-- Java version - using Java 21 (LTS) -->
+        <java.version>21</java.version>
+        
+        <!-- Encoding - always use UTF-8 to avoid character issues -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <!-- Spring Boot is inherited, but we track it here for reference -->
+        <spring-boot.version>3.4.6</spring-boot.version>
+        
+        <!-- Database versions -->
+        <postgresql.version>42.7.7</postgresql.version>
+        
+        <!-- Utility libraries -->
+        <lombok.version>1.18.38</lombok.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        
+        <!-- API Documentation -->
+        <springdoc.version>2.8.9</springdoc.version>
+        
+        <!-- Testing -->
+        <testcontainers.version>1.21.1</testcontainers.version>
+    </properties>
+    
+    <!-- ==================== DEPENDENCY MANAGEMENT ==================== -->
+    <!-- 
+        This section DOESN'T add dependencies to child modules automatically.
+        It only DEFINES versions. Child modules still need to declare 
+        dependencies, but can omit the version tag.
+        
+        Why? Centralized version control = no version conflicts between modules
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- ===== Internal Modules ===== -->
+            <!-- 
+                Allows modules to depend on each other with consistent versioning.
+                ${project.version} = current project version (1.0.0-SNAPSHOT)
+            -->
+            <dependency>
+                <groupId>com.taskforge</groupId>
+                <artifactId>taskforge-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.taskforge</groupId>
+                <artifactId>taskforge-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
+            <!-- ===== Testcontainers BOM ===== -->
+            <!-- 
+                BOM = Bill of Materials. Imports version management for 
+                an entire library family. Now all testcontainers-* dependencies 
+                will use the same compatible version.
+            -->
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <!-- ===== API Documentation ===== -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+            
+            <!-- ===== Utilities ===== -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <!-- ==================== COMMON DEPENDENCIES ==================== -->
+    <!-- 
+        Dependencies here ARE inherited by ALL child modules automatically.
+        Use sparingly - only for things truly needed everywhere.
+    -->
+    <dependencies>
+        <!-- Lombok - reduces boilerplate (getters, setters, builders, etc.) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
+        <!-- Testing - all modules will have JUnit 5 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <!-- ==================== BUILD CONFIGURATION ==================== -->
+    <build>
+        <!-- Plugin management = version control for plugins (like dependencyManagement) -->
+        <pluginManagement>
+            <plugins>
+                <!-- Compiler plugin - configures how Java code is compiled -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <!-- 
+                            Annotation processors run during compilation.
+                            Order matters! Lombok must run before MapStruct.
+                        -->
+                        <annotationProcessorPaths>
+                            <path>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                                <version>${lombok.version}</version>
+                            </path>
+                            <path>
+                                <groupId>org.mapstruct</groupId>
+                                <artifactId>mapstruct-processor</artifactId>
+                                <version>${mapstruct.version}</version>
+                            </path>
+                        </annotationProcessorPaths>
+                        <!-- Enable preview features of Java 21 if needed -->
+                        <compilerArgs>
+                            <arg>-parameters</arg> <!-- Preserve parameter names for reflection -->
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                
+                <!-- Spring Boot Maven plugin - creates executable JARs -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <!-- Exclude Lombok from final JAR (only needed at compile time) -->
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    
+    <!-- ==================== PROFILES ==================== -->
+    <!-- 
+        Profiles allow different configurations for different environments.
+        Activated with: mvn clean install -Pdev or -Pprod
+    -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault> <!-- Default profile -->
+            </activation>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        
+        <profile>
+            <id>prod</id>
+            <properties>
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+    
+</project>

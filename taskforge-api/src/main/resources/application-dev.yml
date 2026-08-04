@@ -1,0 +1,33 @@
+# ============================================
+# Development Profile Configuration
+# ============================================
+# 
+# This file OVERRIDES application.yml when running with:
+#   spring.profiles.active=dev
+#
+# Only include settings that DIFFER from the base config
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update  # Auto-update schema in dev (dangerous in prod!)
+    show-sql: true      # Show SQL in dev
+    
+  # DevTools settings
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+
+# More verbose logging in development
+logging:
+  level:
+    com.taskforge: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    
+# Swagger always enabled in dev
+springdoc:
+  swagger-ui:
+    enabled: true

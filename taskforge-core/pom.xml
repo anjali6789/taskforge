@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.taskforge</groupId>
+        <artifactId>taskforge-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <artifactId>taskforge-core</artifactId>
+    <name>TaskForge Core</name>
+    <description>Core business logic, JPA entities, and domain services</description>
+    
+    <!-- ==================== DEPENDENCIES ==================== -->
+    <!-- 
+        This is the HEART of the application:
+        - JPA Entities (User, Task, Project, Sprint, etc.)
+        - Repository interfaces
+        - Service classes with business logic
+        - Domain events
+        - Design patterns implementation
+    -->
+    <dependencies>
+        <!-- ===== Internal Dependencies ===== -->
+        <!-- 
+            Depends on common module for shared DTOs.
+            Version is managed by parent's dependencyManagement - no version needed!
+        -->
+        <dependency>
+            <groupId>com.taskforge</groupId>
+            <artifactId>taskforge-common</artifactId>
+        </dependency>
+        
+        <!-- ===== Spring Boot Starters ===== -->
+        <!-- 
+            spring-boot-starter-data-jpa brings:
+            - Hibernate (JPA implementation)
+            - Spring Data JPA (repository magic)
+            - Transaction management
+            - Connection pooling (HikariCP)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        
+        <!-- 
+            spring-boot-starter-data-mongodb brings:
+            - MongoDB driver
+            - Spring Data MongoDB
+            We'll use this for activity logs and notifications (polyglot persistence)
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        
+        <!-- 
+            spring-boot-starter-validation brings:
+            - Hibernate Validator (Bean Validation implementation)
+            - Enables @Valid processing
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        
+        <!-- 
+            Redis for caching
+            - Session storage
+            - Query result caching
+            - Rate limiting buckets
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        
+        <!-- ===== Database Drivers ===== -->
+        <!-- 
+            PostgreSQL JDBC driver - actual database connectivity.
+            runtime scope = only needed when running, not for compilation
+        -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <!-- ===== Database Migrations ===== -->
+        <!-- 
+            Flyway - version controls your database schema.
+            Like Git for your database structure.
+        -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+        
+        <!-- ===== Testing ===== -->
+        <!-- 
+            Testcontainers - spins up real databases in Docker for tests.
+            Much better than H2 (in-memory) because it tests against real PostgreSQL.
+        -->
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+</project>

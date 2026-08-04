@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- ==================== PARENT REFERENCE ==================== -->
+    <!-- 
+        This module inherits from the parent POM.
+        It gets all dependencyManagement, pluginManagement, and common dependencies.
+        
+        relativePath tells Maven where to find the parent pom.xml
+    -->
+    <parent>
+        <groupId>com.taskforge</groupId>
+        <artifactId>taskforge-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <!-- 
+        Only artifactId is needed - groupId and version are inherited from parent 
+    -->
+    <artifactId>taskforge-common</artifactId>
+    <name>TaskForge Common</name>
+    <description>Shared utilities, DTOs, and common code used across all modules</description>
+    
+    <!-- 
+        packaging=jar (default) means this produces a JAR file 
+        that other modules can depend on
+    -->
+    
+    <!-- ==================== DEPENDENCIES ==================== -->
+    <!-- 
+        This module contains:
+        - Shared DTOs (Data Transfer Objects) using Java Records
+        - Utility classes
+        - Common exceptions
+        - Shared constants
+        
+        It should have MINIMAL dependencies to avoid pulling unnecessary 
+        libraries into all other modules.
+    -->
+    <dependencies>
+        <!-- 
+            Validation API - for @NotNull, @Size, @Email annotations on DTOs
+            These constraints are defined here but enforced in the API layer
+        -->
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        
+        <!-- 
+            Jackson annotations - for JSON serialization hints
+            @JsonProperty, @JsonIgnore, etc.
+        -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        
+        <!-- MapStruct for DTO <-> Entity mapping -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+    </dependencies>
+    
+</project>

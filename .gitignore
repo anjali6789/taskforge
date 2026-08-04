@@ -1,0 +1,30 @@
+# ============================================
+# TaskForge .gitignore
+# ============================================
+
+# Maven build output - never commit these
+target/
+*.jar
+*.war
+*.class
+
+# Maven wrapper (optional - can commit if you want)
+# .mvn/wrapper/maven-wrapper.jar
+
+# IDE files - your editor config, not the project
+.idea/
+*.iml
+.vscode/
+*.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Environment/secrets - NEVER commit these
+.env
+*.env
+application-local.yml
+
+# Spring Boot dev files
+spring-shell.log

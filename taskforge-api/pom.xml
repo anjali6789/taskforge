@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.taskforge</groupId>
+        <artifactId>taskforge-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    
+    <artifactId>taskforge-api</artifactId>
+    <name>TaskForge API</name>
+    <description>REST API controllers, security, and web configuration</description>
+    
+    <!-- ==================== DEPENDENCIES ==================== -->
+    <!-- 
+        This is the ENTRY POINT of the application:
+        - REST Controllers
+        - Security configuration (JWT, OAuth2)
+        - Request/Response handling
+        - API documentation
+        - The main() method lives here
+    -->
+    <dependencies>
+        <!-- ===== Internal Dependencies ===== -->
+        <dependency>
+            <groupId>com.taskforge</groupId>
+            <artifactId>taskforge-core</artifactId>
+        </dependency>
+        <!-- Note: taskforge-common comes transitively through taskforge-core -->
+        
+        <!-- ===== Web Layer ===== -->
+        <!-- 
+            spring-boot-starter-web brings:
+            - Embedded Tomcat server
+            - Spring MVC
+            - Jackson for JSON processing
+            - Error handling
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- ===== Security ===== -->
+        <!-- 
+            Spring Security for:
+            - Authentication (who are you?)
+            - Authorization (what can you do?)
+            - CORS, CSRF protection
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        
+        <!-- 
+            OAuth2 Resource Server - for JWT token validation
+            Our API will be a "resource server" that validates tokens
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+        
+        <!-- ===== API Documentation ===== -->
+        <!-- 
+            SpringDoc OpenAPI - generates Swagger UI automatically
+            Visit /swagger-ui.html to see interactive API docs
+        -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+        
+        <!-- ===== Observability ===== -->
+        <!-- 
+            Actuator provides:
+            - /actuator/health - health checks for Kubernetes
+            - /actuator/metrics - Prometheus metrics
+            - /actuator/info - application info
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        
+        <!-- 
+            Micrometer Prometheus registry - exposes metrics in Prometheus format
+            Grafana will scrape these metrics for dashboards
+        -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        
+        <!-- ===== Development Tools ===== -->
+        <!-- 
+            DevTools enables:
+            - Automatic restart on code changes
+            - LiveReload
+            - Better error pages
+            
+            optional=true means it won't be included in final JAR
+        -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        
+        <!-- ===== Testing ===== -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <!-- ==================== BUILD ==================== -->
+    <build>
+        <plugins>
+            <!-- 
+                Spring Boot Maven Plugin - this module produces the executable JAR
+                Only the API module needs this because it has the main() method
+            -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>
