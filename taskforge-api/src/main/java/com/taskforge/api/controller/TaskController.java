@@ -40,15 +40,11 @@ public class TaskController {
         return taskService.createTask(title);
     }
 
-    // ResponseEntity gives us 200 on success, 404 if task doesn't exist
+    // ResponseEntity gives us 200 on success; 404 is handled by GlobalExceptionHandler
     @PutMapping("/{id}/status")
     public ResponseEntity<Task> updateTaskStatus(@PathVariable String id, @RequestParam TaskStatus status) {
-        try {
-            Task updated = taskService.updateTask(id, status);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Task updated = taskService.updateTask(id, status);
+        return ResponseEntity.ok(updated);
     }
 
     // @ResponseStatus(NO_CONTENT) sends 204 — success with no body

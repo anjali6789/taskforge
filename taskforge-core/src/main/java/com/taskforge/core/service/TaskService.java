@@ -1,6 +1,7 @@
 package com.taskforge.core.service;
 import com.taskforge.core.entity.Task;
 import com.taskforge.core.entity.TaskStatus;
+import com.taskforge.core.exception.TaskNotFoundException;
 import com.taskforge.core.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -34,7 +35,7 @@ public class TaskService {
 
     @Transactional
     public Task updateTask(String id, TaskStatus newStatus) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+        Task task = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException(id));
         task.setStatus(newStatus);
         return taskRepository.save(task);
     }

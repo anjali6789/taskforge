@@ -60,8 +60,8 @@
         ${property.name} syntax references these values throughout the POM.
     -->
     <properties>
-        <!-- Java version - using Java 21 (LTS) -->
-        <java.version>21</java.version>
+        <!-- Java version - using Java 25 (LTS) -->
+        <java.version>25</java.version>
         
         <!-- Encoding - always use UTF-8 to avoid character issues -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -69,9 +69,12 @@
         
         <!-- Spring Boot is inherited, but we track it here for reference -->
         <spring-boot.version>3.4.6</spring-boot.version>
+
+        <!-- Spring Kafka security fixes: CVE-2026-41731, CVE-2026-41726, CVE-2026-41727 -->
+        <spring-kafka.version>3.3.16</spring-kafka.version>
         
         <!-- Database versions -->
-        <postgresql.version>42.7.7</postgresql.version>
+        <postgresql.version>42.7.12</postgresql.version>
         
         <!-- Utility libraries -->
         <lombok.version>1.18.38</lombok.version>
@@ -190,7 +193,7 @@
                                 <version>${mapstruct.version}</version>
                             </path>
                         </annotationProcessorPaths>
-                        <!-- Enable preview features of Java 21 if needed -->
+                        <!-- Enable preview features of Java 25 if needed -->
                         <compilerArgs>
                             <arg>-parameters</arg> <!-- Preserve parameter names for reflection -->
                         </compilerArgs>

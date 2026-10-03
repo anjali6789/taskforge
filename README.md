@@ -5,7 +5,7 @@ A hands-on Java learning project building a production-ready Task Management Sys
 ## Quick Start
 
 ### Prerequisites
-- Java 21+
+- Java 25+
 - Maven 3.8+
 - Docker & Docker Compose
 
